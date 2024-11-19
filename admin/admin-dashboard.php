@@ -207,6 +207,7 @@
             document.getElementById('disapprovalReason').value = '';
         }
     </script>
+    <script src="js/sidebar.js"></script>
 
 </body>
 

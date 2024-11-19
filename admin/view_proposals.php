@@ -11,6 +11,7 @@ if ($_SESSION['role'] !== 'admin') {
 // Query the activity_proposals table
 $sql = "SELECT * FROM activity_proposals";
 $result = $conn->query($sql);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,51 +25,53 @@ $result = $conn->query($sql);
 
 <body>
     <?php include '../includes/navbar.php' ?>
-    <hr>
-    <hr>
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Submitted Proposals</h2>
 
-        <?php if ($result && $result->num_rows > 0): ?>
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">Organization</th>
-                        <th class="text-center">Title</th>
-                        <th class="text-center">Date</th>
-                        <th class="text-center">Start Time</th>
-                        <th class="text-center">Finish Time</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+
+    <div class=content>
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Submitted Proposals</h2>
+
+            <?php if ($result && $result->num_rows > 0): ?>
+                <table class="table table-striped table-bordered">
+                    <thead>
                         <tr>
-                            <td class="text-center"><?= htmlspecialchars($row['club_name'] ?? '') ?></td>
-                            <td class="text-center"><?= htmlspecialchars($row['activity_title'] ?? '') ?></td>
-                            <td class="text-center"><?= htmlspecialchars($row['activity_date'] ?? '') ?></td>
-                            <td class="text-center"><?= htmlspecialchars($row['start_time'] ?? '') ?></td>
-                            <td class="text-center"><?= htmlspecialchars($row['end_time'] ?? '') ?></td>
-                            <td class="text-center"><?= htmlspecialchars($row['status'] ?? 'Pending') ?></td>
-                            <td class="text-center">
-                                <a href="../approvals/approve.php?id=<?= $row['proposal_id'] ?>" class="btn btn-success btn-sm">Approve</a>
-                                <button
-                                    class="btn btn-danger btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#rejectModal"
-                                    data-id="<?= $row['proposal_id'] ?>">Reject</button>
-                                <a href="view_document.php?id=<?= $row['proposal_id'] ?>" class="btn btn-primary btn-sm">View Document</a>
-                            </td>
+                            <th class="text-center">Organization</th>
+                            <th class="text-center">Title</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Start Time</th>
+                            <th class="text-center">Finish Time</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Actions</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No proposals found.</p>
-        <?php endif; ?>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td class="text-center"><?= htmlspecialchars($row['club_name'] ?? '') ?></td>
+                                <td class="text-center"><?= htmlspecialchars($row['activity_title'] ?? '') ?></td>
+                                <td class="text-center"><?= htmlspecialchars($row['activity_date'] ?? '') ?></td>
+                                <td class="text-center"><?= htmlspecialchars($row['start_time'] ?? '') ?></td>
+                                <td class="text-center"><?= htmlspecialchars($row['end_time'] ?? '') ?></td>
+                                <td class="text-center"><?= htmlspecialchars($row['status'] ?? 'Pending') ?></td>
+                                <td class="text-center">
+                                    <a href="../approvals/approve.php?id=<?= $row['proposal_id'] ?>" class="btn btn-success btn-sm">Approve</a>
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#rejectModal"
+                                        data-id="<?= $row['proposal_id'] ?>">Reject</button>
+                                    <a href="../view_document.php?id=<?= $row['proposal_id'] ?>" class="btn btn-primary btn-sm">View Document</a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No proposals found.</p>
+            <?php endif; ?>
 
-        <?php $conn->close(); ?>
+            <?php $conn->close(); ?>
+        </div>
     </div>
 
     <!-- Reject Modal -->
@@ -108,6 +111,23 @@ $result = $conn->query($sql);
             modalInput.value = proposalId;
         });
     </script>
+    <script>
+        toggleSidebarButton.addEventListener('click', () => {
+            const isHidden = sidebar.classList.contains('sidebar-hidden');
+            sidebar.classList.toggle('sidebar-hidden', !isHidden);
+            sidebar.classList.toggle('sidebar-shown', isHidden);
+            content.classList.toggle('sidebar-active', isHidden);
+            sidebar.setAttribute('aria-hidden', !isHidden);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault(); // Prevent default browser behavior
+                toggleSidebarButton.click();
+            }
+        });
+    </script>
+
 </body>
 
 </html>

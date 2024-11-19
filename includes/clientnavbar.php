@@ -16,8 +16,8 @@ if (substr($basePath, -1) !== '/') {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="admin.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="clubmanagement.php">Club Management</a></li>
+                <li class="nav-item"><a class="nav-link active" href="client.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="public/forms.php">Forms</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
             </ul>
